@@ -1,0 +1,27 @@
+body {
+    margin: 0;
+}
+
+#container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#gameboard-container {
+    margin: auto auto;
+    height: fit-content;
+}ˇ
+
+#gameboard {
+    border-collapse: collapse;
+}
+
+#gameboard td {
+    border: solid 1px gray;
+    padding: 0px;
+    width: 14px;
+    height: 14px;
+    font-size: 10px;
+}
