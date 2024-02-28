@@ -1,5 +1,5 @@
-import { GameBoard } from "./src/GameBoard.js";
-import { OBlock } from "./src/OBlock.js";
+import { GameBoard } from "./GameBoard.js";
+import { OBlock } from "./OBlock.js";
 
 // const messageDiv = document.getElementById('message');
 // const scoreDiv = document.getElementById('score');
@@ -21,16 +21,21 @@ function initGame () {
     // messageDiv.innerText = '';
     // messageDiv.classList.add('hidden');
 
-
     const gameBoard = new GameBoard(boardSizeX, boardSizeY);
-    const oBlock = new OBlock(boardSizeX, boardSizeY);
-    gameBoard.addNewBlock(oBlock);
+    gameBoard.addNewBlock();
     gameBoard.draw();
 
     (function repeat() {
         timeoutID = setTimeout(repeat, speed);
-        if ( gameBoard.canGoDown(oBlock) ) {
-            oBlock.moveDown();
+        const currentBlock = gameBoard.getCurrentBlock();
+        if ( currentBlock.canGoDown(gameBoard.getState()) ) {
+            currentBlock.moveDown();
+        } else {
+            if ( !currentBlock.getIsStopped() ) {
+                gameBoard.addBlockToState(currentBlock);
+                currentBlock.stop();
+                gameBoard.addNewBlock();
+            }
         }
         gameBoard.draw();
     })();
