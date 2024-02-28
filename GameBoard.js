@@ -1,3 +1,5 @@
+import { OBlock } from "./OBlock.js";
+
 class GameBoard {
     
     state = [];
@@ -14,12 +16,11 @@ class GameBoard {
         for ( let y = 0; y < this.boardSizeY; y++ ) {
             let arr = [];
             for ( let x = 0; x < this.boardSizeX; x++ ) {
-                arr.push("");
+                arr.push('');
             }
             this.state.push(arr);
         }
-   
-    
+
         document.addEventListener ('keydown', e => {
             switch ( e.key ) {
                 // case 'ArrowUp':
@@ -29,12 +30,16 @@ class GameBoard {
                 //     direction = 'd';
                 //     break;
                 case 'ArrowLeft':
-                    this.currentBlock.moveLeft();
-                    this.draw();
+                    if ( this.currentBlock.canGoLeft(this.state) ) {
+                        this.currentBlock.moveLeft();
+                        this.draw();
+                    }
                     break;
                 case 'ArrowRight':
-                    this.currentBlock.moveRight();
-                    this.draw();
+                    if ( this.currentBlock.canGoRight(this.state) ) {
+                        this.currentBlock.moveRight();
+                        this.draw();
+                    }
                     break;
             }
         });
@@ -56,6 +61,13 @@ class GameBoard {
                     boardCellTd.classList.add(this.currentBlock.class);
                 }
 
+                // draw colors
+
+                if ( this.state[y][x] != '' ) {
+                    boardCellTd.classList.add(this.state[y][x]);
+                }
+
+
                 boardRowTr.append(boardCellTd);
             }
             this.gameBoardTable.append(boardRowTr);
@@ -64,10 +76,26 @@ class GameBoard {
         // scoreDiv.innerText = 'Score: ' + score;
     }
 
-    addNewBlock( block ) {
-        this.currentBlock = block;
+    getState () {
+        return this.state;
     }
 
+    getCurrentBlock () {
+        return this.currentBlock;
+    }
+
+    addNewBlock() {
+        this.currentBlock = new OBlock(this.boardSizeX, this.boardSizeY);
+    }
+
+    addBlockToState ( block ) {
+
+        const coordinates = block.getCoordinates();
+        coordinates.forEach( el => {
+            this.state[el[0]][el[1]] = block.class;
+        });
+
+    }
 }
 
 export { GameBoard }
