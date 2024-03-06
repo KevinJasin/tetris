@@ -1,7 +1,15 @@
 import { OBlock } from "./OBlock.js";
+import { LBlock } from "./LBlock.js";
+import { JBlock } from "./JBlock.js";
+import { IBlock } from "./IBlock.js";
+import { SBlock } from "./SBlock.js";
+import { ZBlock } from "./ZBlock.js";
+import { TBlock } from "./TBlock.js";
 
 class GameBoard {
-    
+
+    allBlocks = [OBlock, LBlock, JBlock, IBlock, SBlock, ZBlock, TBlock];
+
     state = [];
     gameBoardTable = document.getElementById('gameboard');
     boardSizeX;
@@ -21,11 +29,14 @@ class GameBoard {
             this.state.push(arr);
         }
 
+        console.log(this.state);
+
         document.addEventListener ('keydown', e => {
             switch ( e.key ) {
-                // case 'ArrowUp':
-                //     direction = 'u';
-                //     break;
+                case 'ArrowUp':
+                    this.currentBlock.nextPose();
+                    this.draw();
+                    break;
                 // case 'ArrowDown':
                 //     direction = 'd';
                 //     break;
@@ -85,7 +96,8 @@ class GameBoard {
     }
 
     addNewBlock() {
-        this.currentBlock = new OBlock(this.boardSizeX, this.boardSizeY);
+        const i = Math.floor(Math.random() * 7);
+        this.currentBlock = new this.allBlocks[i](this.boardSizeX, this.boardSizeY);
     }
 
     addBlockToState ( block ) {
@@ -96,6 +108,23 @@ class GameBoard {
         });
 
     }
+
+    checkRows () {
+
+        for ( let i = 0; i < this.boardSizeY; i++ ) {
+        
+            const row = this.state[i];
+            const c = row.filter( cell => cell == '' ).length;
+
+            if ( c == 0 ) {
+                this.state.splice(i, 1);
+                this.state.unshift(new Array(this.boardSizeX).fill(''));
+            }
+
+        }
+
+    }
+
 }
 
 export { GameBoard }
