@@ -1,5 +1,4 @@
-import { GameBoard } from "./GameBoard.js";
-import { OBlock } from "./OBlock.js";
+import { GameBoard } from "./src/GameBoard.js";
 
 // const messageDiv = document.getElementById('message');
 // const scoreDiv = document.getElementById('score');
@@ -34,6 +33,7 @@ function initGame () {
             if ( !currentBlock.getIsStopped() ) {
                 gameBoard.addBlockToState(currentBlock);
                 currentBlock.stop();
+                gameBoard.checkRows();
                 gameBoard.addNewBlock();
             }
         }
